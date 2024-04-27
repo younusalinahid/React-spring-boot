@@ -1,12 +1,12 @@
-import React, {Component} from "react";
+import React from "react"
 
 //class Component
-export  default class FirstComponent extends Component {
-    render() {
-        return (
-            <div className="FirstComponent">
-                First Component
-            </div>
-        );
-    }
+function ThirdComponent() {
+    return (
+        <div className="ThirdComponent">
+            Third Component
+        </div>
+    )
 }
+
+export default ThirdComponent
