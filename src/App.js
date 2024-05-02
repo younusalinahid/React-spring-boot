@@ -2,17 +2,16 @@ import React, {Component} from "react"
 import FirstComponent from './components/learning-examples/FistComponent'
 import SecondComponent from './components/learning-examples/SecondComponent'
 import ThirdComponent from './components/learning-examples/ThirdComponent'
-import Counter from "./components/counter/Counter";
+import CounterButton from "./components/counter/Counter";
 import './App.css'
+import Counter from "./components/counter/Counter";
 
 
 class App extends Component {
     render() {
         return (
             <div className="App">
-                <Counter by = {1}/>
-                <Counter by = {5}/>
-                <Counter by = {10}/>
+                <Counter/>
             </div>
         );
     }
