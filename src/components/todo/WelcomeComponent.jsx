@@ -1,8 +1,8 @@
 import React, {Component} from "react";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom"; // Added useParams
 import HelloWorldService from "../../api/todo/HelloWorldService";
 
-class WelcomeComponent extends Component{
+class WelcomeComponent extends Component {
 
     constructor(props) {
         super(props);
@@ -11,19 +11,17 @@ class WelcomeComponent extends Component{
             welcomeMessage: ''
         };
         this.handleSuccessfulResponse = this.handleSuccessfulResponse.bind(this)
-        // this.handleError = this.handleError.bind(this)
+        this.handleError = this.handleError.bind(this)
     }
 
     render() {
-        const { name } = this.props; // Destructure name from props
-
+        const { name } = this.props.params; // Adjusted to extract name from params
         return (
             <>
                 <h1>Welcome!</h1>
                 <div className="container">
-                    {/* eslint-disable-next-line no-restricted-globals */}
-                    Welcome {name}.
-                    You can manage your todos <Link to="/todos">here</Link>
+                    Welcome {name}. {/* Adjusted to use name */}
+                    You can manage your todos <Link to="/todos">here</Link>.
                 </div>
                 <div className="container">
                     Click here to get a customized welcome message.
@@ -38,21 +36,34 @@ class WelcomeComponent extends Component{
     }
 
     retrieveWelcomeMessage() {
-        // HelloWorldService.executeHelloWorldService()
-        // .then( response => this.handleSuccessfulResponse(response) )
-
-        // HelloWorldService.executeHelloWorldBeanService()
-        // .then( response => this.handleSuccessfulResponse(response) )
-
-        HelloWorldService.executeHelloWorldPathVariableService(this.props.params.name)
+        HelloWorldService.executeHelloWorldPathVariableService(this.props.params.name) // Adjusted to use this.props.params.name
             .then(response => this.handleSuccessfulResponse(response))
-            //.catch(error => this.handleError(error))
+            .catch(error => this.handleError(error))
     }
 
     handleSuccessfulResponse(response) {
         console.log(response)
         this.setState({welcomeMessage: response.data.message})
     }
+
+    handleError(error) {
+        let errorMessage = '';
+        if (error.message) {
+            errorMessage += error.message
+        }
+
+        if (error.response && error.response.data) {
+            errorMessage += ' ' + error.response.data.message // Added space for better readability
+        }
+        this.setState({welcomeMessage: errorMessage})
+    }
+
 }
 
-export default WelcomeComponent;
+// Added a higher-order component to pass params
+const WelcomeComponentWithParams = (props) => {
+    const params = useParams();
+    return <WelcomeComponent {...props} params={params} />;
+};
+
+export default WelcomeComponentWithParams;
